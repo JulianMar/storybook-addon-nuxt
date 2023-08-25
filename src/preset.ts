@@ -7,7 +7,7 @@ import vuePlugin from '@vitejs/plugin-vue';
 import viteJsxPlugin from '@vitejs/plugin-vue-jsx';
 
 export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
-  const nuxtViteConfig = await useNuxtViteConfig();
+  const nuxtViteConfig = await useNuxtViteConfig(config.root);
   const { viteConfig } = nuxtViteConfig;
 
   // https://github.com/storybookjs/storybook/issues/20817
@@ -41,10 +41,10 @@ const vuePlugins = {
   'vite:vue-jsx': [viteJsxPlugin, 'vueJsx'],
 } as const;
 
-async function useNuxtViteConfig() {
+async function useNuxtViteConfig(root: string) {
   const { loadNuxt, buildNuxt } = await import('@nuxt/kit');
   const nuxt = await loadNuxt({
-    // cwd: process.cwd(),
+    cwd: root,
     ready: false,
     dev: process.env.NODE_ENV === 'development',
     overrides: {
